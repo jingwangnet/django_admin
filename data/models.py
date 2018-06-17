@@ -119,12 +119,6 @@ class Address(models.Model):
             help_text="区域"
             )
 
-    city = models.ForeignKey(
-            City, 
-            on_delete=models.CASCADE, 
-            help_text="城市"
-            )
-
 
     def company_count(self):
         company_list = self.company_set.all() 
@@ -137,11 +131,6 @@ class Address(models.Model):
 
 class Company(models.Model):
     name = models.CharField(max_length=20, unique=True)
-    zone = models.ForeignKey(
-            Zone,
-            on_delete=models.CASCADE,
-            help_text="地区"
-            )
     address = models.ForeignKey(
             Address,
             on_delete=models.CASCADE,
@@ -183,7 +172,7 @@ class Company(models.Model):
 
  ### 部门
 class Department(models.Model):
-    name = models.CharField(max_length=8, unique=True, help_text="部门")
+    name = models.CharField(max_length=8, unique=True, help_text="部门", blank=True, null=True )
 
     @property
     def employees_count (self):

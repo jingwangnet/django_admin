@@ -47,6 +47,7 @@ class CityAdmin(admin.ModelAdmin):
     list_filter = ('province',) 
    
 
+
 @admin.register(Zone)
 class ZoneAdmin(admin.ModelAdmin):
     list_display = ('name', 'city',  'address_count', )
@@ -55,17 +56,24 @@ class ZoneAdmin(admin.ModelAdmin):
 
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):
-    list_display = ('name', 'zone', 'city', 'company_count')
-    list_filter = ('zone', 'city', )
+    list_display = ('name', 'zone',  'company_count')
+    list_filter = ('zone',  )
    
+
+class EmployeesInline(admin.TabularInline):
+    model = Employees 
+    extra = 1
 
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin,ExportCsvMixin):
-    list_display = ('name', 'get_industry', 'is_success', 'property', 'zone', 'address', 'employees_count', 'modify_time', 'create_time')
+    list_display = ('name', 'get_industry', 'is_success', 'property',  'address', 'employees_count', 'modify_time', 'create_time')
 
     date_hierarchy = 'create_time'
-    list_filter = ("property", "industry", "zone",'is_success',)   
+    list_filter = ("property", "industry", 'is_success',)   
     actions = ["export_as_csv"]
+    inlines = [
+        EmployeesInline,
+    ]
 
     def get_industry(self, obj):
         return ' '.join([i.name for i in obj.industry.all()])
