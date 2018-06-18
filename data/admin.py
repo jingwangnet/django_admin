@@ -1,12 +1,14 @@
 import csv
 from django.http import HttpResponse
 from django.contrib import admin
+from django.urls import path
 from .models import *
 
 admin.site.site_header = "静网数据"
 admin.site.site_title = "静网数据 Admin Portal"
 admin.site.index_title = "静网数据后台管理"
 
+## Add export CSV action
 class ExportCsvMixin:
     def export_as_csv(self, request, queryset):
 
@@ -70,14 +72,18 @@ class CompanyAdmin(admin.ModelAdmin,ExportCsvMixin):
 
     date_hierarchy = 'create_time'
     list_filter = ("property", "industry", 'is_success',)   
-    actions = ["export_as_csv"]
+    actions = ["export_as_csv", "mark_success"]
     inlines = [
         EmployeesInline,
     ]
 
+    def mark_success(self, request, queryset):
+        queryset.update(is_success=True)
+
     def get_industry(self, obj):
         return ' '.join([i.name for i in obj.industry.all()])
-   
+
+    
 
 @admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):

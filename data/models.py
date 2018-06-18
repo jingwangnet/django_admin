@@ -51,10 +51,12 @@ class Industry(models.Model):
 
 ## Location info class
 
+
 class Province(models.Model):
     name = models.CharField(
             max_length=5,
             unique=True,
+            help_text='省份'
             )
 
     @property
