@@ -205,12 +205,12 @@ class Employees(models.Model):
 
     name = models.CharField('姓名', max_length=8)
     gender = models.CharField('性别', max_length=1, choices=GENDER_CHOICES)
-    position = models.ForeignKey(Position, on_delete=models.CASCADE)
-    department = models.ForeignKey(Department, on_delete=models.CASCADE)
-    phone = models.CharField('手机号码', max_length=11, unique=True)
-    tel = models.CharField('电话', max_length=11, unique=True, blank=True, null=True)
-    remark= models.CharField('备注', max_length=20, blank=True)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    position = models.ForeignKey(Position, on_delete=models.CASCADE, help_text="职位")
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, help_text="部门")
+    phone = models.CharField('手机号码', max_length=11, unique=True, help_text="手机号码")
+    tel = models.CharField('电话', max_length=11, unique=True, blank=True, null=True, help_text="电话")
+    remark= models.CharField(max_length=20, blank=True, help_text="备注")
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, help_text="公司")
     create_time = models.DateField('创建日期', auto_now_add=True)
     modify_time = models.DateField('最后修改日期', default=timezone.now)
 
