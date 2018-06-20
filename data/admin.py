@@ -67,23 +67,11 @@ class ZoneResource(resources.ModelResource):
 
 @admin.register(Zone)
 class ZoneAdmin(ImportExportModelAdmin):
-    list_display = ('name', 'city',  'address_count', )
+    list_display = ('name', 'city',  'company_count', )
     list_filter = ('city', ) 
     search_fields = ('name',)
     resource_class = ZoneResource
    
-## Address
-class AddressResource(resources.ModelResource):
-   
-    class Meta:
-        model = Address
-
-@admin.register(Address)
-class AddressAdmin(ImportExportModelAdmin):
-    list_display = ('name', 'zone',  'company_count')
-    list_filter = ('zone',  )
-    search_fields = ('name',)
-    resource_class = AddressResource
 
 class EmployeesInline(admin.StackedInline):
     model = Employees 
@@ -97,10 +85,10 @@ class CompanyResource(resources.ModelResource):
 
 @admin.register(Company)
 class CompanyAdmin(ImportExportModelAdmin):
-    list_display = ('name', 'get_industry', 'is_success', 'property',  'address', 'employees_count', 'modify_time', 'create_time')
+    list_display = ('name', 'get_industry', 'is_success', 'property',  'zone', 'employees_count', 'modify_time', 'create_time')
 
     date_hierarchy = 'create_time'
-    list_filter = ("property", "industry", 'is_success',)   
+    list_filter = ("property", "industry", 'is_success', 'zone')   
     actions = ["mark_success"]
     inlines = [
         EmployeesInline,

@@ -101,60 +101,37 @@ class Zone(models.Model):
             )
 
 
-    def address_count(self):
-        return self.address_set.count()
-
-
-    def __str__(self):
-        return self.name
-
-class Address(models.Model):
-    name = models.CharField(
-            max_length=10,
-            unique=True,
-            help_text="地址"
-            )
-
-    zone = models.ForeignKey(
-            Zone, 
-            on_delete=models.CASCADE, 
-            help_text="区域"
-            )
-
-
     def company_count(self):
-        company_list = self.company_set.all() 
-        return len(company_list)
+        return self.company_set.count()
 
 
     def __str__(self):
         return self.name
+
 
 
 class Company(models.Model):
     name = models.CharField(max_length=20, unique=True)
-    address = models.ForeignKey(
-            Address,
-            on_delete=models.CASCADE,
-            help_text="地址"
-            )
-
     property =  models.ForeignKey(
             Property,
             on_delete=models.CASCADE,
-            help_text="企业性质"
+            help_text="企业性质",
+            blank=True, 
+            null=True
             )
 
-    industry =  models.ManyToManyField(
+    industry  =  models.ManyToManyField(
             Industry,
             help_text="行业"
             )
 
     is_success = models.BooleanField(default=False)
     info = models.TextField(blank=True, null=True)
-
     create_time = models.DateField('创建日期', auto_now_add=True)
     modify_time = models.DateField('最后修改日期', default=timezone.now)
+    zone = models.ForeignKey(Zone, on_delete=models.CASCADE, blank=True, null=True)
+    address = models.CharField('地址', max_length=30)
+
 
     def get_city(self):
         city = '{city}'.format(city=self.zone.city.city_name)

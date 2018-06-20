@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'data',
     'import_export',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
 ]
 
 MIDDLEWARE = [
@@ -124,3 +126,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, "../static")
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+SITE_ID = 1
