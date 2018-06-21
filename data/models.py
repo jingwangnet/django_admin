@@ -14,6 +14,7 @@ class Property(models.Model):
             )
 
     name = models.CharField(
+            "公司性质名",
             max_length=2,
             choices=COMPANY_PROPERTY,
             default='民营',
@@ -31,12 +32,14 @@ class Industry(models.Model):
     公司的行业
     """
     name = models.CharField(
+            '行业',
             max_length=10,
             default='',
             help_text='公司行业',
             )
 
     info = models.TextField(
+            '附加信息',
             blank=True, 
             null=True
             )
@@ -54,6 +57,7 @@ class Industry(models.Model):
 
 class Province(models.Model):
     name = models.CharField(
+            '省份',
             max_length=5,
             unique=True,
             help_text='省份'
@@ -72,16 +76,18 @@ class Province(models.Model):
 
 class City(models.Model):
     name = models.CharField(
-            max_length=5,
-            unique=True,
-            help_text='城市'
-            )
+        '城市',
+        max_length=5,
+        unique=True,
+        help_text='城市'
+    )
 
     province = models.ForeignKey(
-            Province, 
-            on_delete=models.CASCADE, 
-            help_text='省份'
-            )
+        Province, 
+        on_delete=models.CASCADE, 
+        verbose_name="省份",
+        help_text='省份'
+    )
 
     @property
     def zone_count(self,):
@@ -97,6 +103,7 @@ class City(models.Model):
 
 class Zone(models.Model):
     name = models.CharField(
+            '区域',
             max_length=10,
             unique=True,
             help_text="区域"
@@ -105,7 +112,8 @@ class Zone(models.Model):
     city = models.ForeignKey(
             City, 
             on_delete=models.CASCADE, 
-            help_text="城市"
+            help_text="城市",
+            verbose_name="城市"
             )
 
 
@@ -119,6 +127,7 @@ class Zone(models.Model):
 
 class Address(models.Model):
     name = models.CharField(
+            "地址",
             max_length=10,
             unique=True,
             help_text="区域",
@@ -127,6 +136,7 @@ class Address(models.Model):
     zone = models.ForeignKey(
             Zone, 
             on_delete=models.CASCADE, 
+            verbose_name="区域",
             help_text="区域"
             )
 
@@ -140,18 +150,20 @@ class Address(models.Model):
 
 
 class Company(models.Model):
-    name = models.CharField(max_length=20, unique=True)
+    name = models.CharField('公司',max_length=20, unique=True)
     property =  models.ForeignKey(
             Property,
             on_delete=models.CASCADE,
             help_text="企业性质",
+            verbose_name="企业性质",
             blank=True, 
             null=True
             )
 
     industry  =  models.ManyToManyField(
             Industry,
-            help_text="行业"
+            help_text="行业",
+            verbose_name="行业",
             )
 
     is_success = models.BooleanField(default=False)
@@ -182,7 +194,7 @@ class Company(models.Model):
 
  ### 部门
 class Department(models.Model):
-    name = models.CharField(max_length=8, unique=True, help_text="部门", blank=True, null=True )
+    name = models.CharField('部门',max_length=8, unique=True, help_text="部门", blank=True, null=True )
 
     @property
     def employees_count (self):
@@ -194,7 +206,7 @@ class Department(models.Model):
 
 ### 职位
 class Position(models.Model):
-    name = models.CharField(max_length=8, unique=True, help_text="职位")
+    name = models.CharField('职位',max_length=8, unique=True, help_text="职位")
 
     def employees_count (self):
         return self.employees_set.count()
@@ -213,12 +225,27 @@ class Employees(models.Model):
 
     name = models.CharField('姓名', max_length=8)
     gender = models.CharField('性别', max_length=1, choices=GENDER_CHOICES)
-    position = models.ForeignKey(Position, on_delete=models.CASCADE, help_text="职位")
-    department = models.ForeignKey(Department, on_delete=models.CASCADE, help_text="部门")
+    position = models.ForeignKey(
+        Position, 
+        on_delete=models.CASCADE, 
+        help_text="职位",
+        verbose_name="职位"
+    )
+    department = models.ForeignKey(
+        Department, 
+        on_delete=models.CASCADE, 
+        help_text="部门",
+        verbose_name="部门"
+    )
+    company = models.ForeignKey(
+        Company, 
+        on_delete=models.CASCADE, 
+        help_text="公司",
+        verbose_name="公司"
+    )
     phone = models.CharField('手机号码', max_length=11, unique=True, help_text="手机号码")
     tel = models.CharField('电话', max_length=11, unique=True, blank=True, null=True, help_text="电话")
     remark= models.CharField(max_length=20, blank=True, help_text="备注")
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, help_text="公司")
     create_time = models.DateField('创建日期', auto_now_add=True)
     modify_time = models.DateField('最后修改日期', default=timezone.now)
 
