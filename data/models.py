@@ -27,6 +27,11 @@ class Property(models.Model):
     def company_count(self):
         return self.company_set.count()
 
+    class Meta:
+        ordering = ["-id"]
+        verbose_name = '公司性质'
+        verbose_name_plural = '公司性质'
+
 class Industry(models.Model):
     """
     公司的行业
@@ -51,6 +56,10 @@ class Industry(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ["-id"]
+        verbose_name = '行业'
+        verbose_name_plural = '行业'
 
 ## Location info class
 
@@ -73,6 +82,11 @@ class Province(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ["-id"]
+        verbose_name = '省份'
+        verbose_name_plural = '省份'
 
 class City(models.Model):
     name = models.CharField(
@@ -100,6 +114,10 @@ class City(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ["-id"]
+        verbose_name = '城市'
+        verbose_name_plural = '城市'
 
 class Zone(models.Model):
     name = models.CharField(
@@ -124,6 +142,10 @@ class Zone(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ["-id"]
+        verbose_name = '区域'
+        verbose_name_plural = '区域'
 
 class Address(models.Model):
     name = models.CharField(
@@ -148,6 +170,10 @@ class Address(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ["-id"]
+        verbose_name = '地址'
+        verbose_name_plural = '地址'
 
 class Company(models.Model):
     name = models.CharField('公司',max_length=20, unique=True)
@@ -196,6 +222,8 @@ class Company(models.Model):
         return self.name
 
     class Meta:
+        verbose_name = "公司"
+        verbose_name_plural = "公司"
         ordering = ["-id"]
         get_latest_by = "modify_time"
 
@@ -211,6 +239,10 @@ class Department(models.Model):
     def __str__ (self):
         return self.name
 
+    class Meta:
+        ordering = ["-id"]
+        verbose_name = '部门'
+        verbose_name_plural = '部门'
 
 ### 职位
 class Position(models.Model):
@@ -221,6 +253,11 @@ class Position(models.Model):
 
     def __str__ (self):
         return self.name
+
+    class Meta:
+        ordering = ["-id"]
+        verbose_name = '职位'
+        verbose_name_plural = '职位'
 
 ### 职员
 class Employees(models.Model):
@@ -270,3 +307,5 @@ class Employees(models.Model):
     class Meta:
         ordering = ["-id"]
         get_latest_by = "modify_time"
+        verbose_name = '员工'
+        verbose_name_plural = '员工'
