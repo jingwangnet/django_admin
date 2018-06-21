@@ -188,8 +188,16 @@ class Company(models.Model):
     def employees_count(self):
         return self.employees_set.count()
 
+    @classmethod
+    def recent_add_companies(cls):
+        return cls.objects.filter(modify_time=cls.objects.latest().modify_time)
+
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ["-id"]
+        get_latest_by = "modify_time"
 
 
  ### 部门
@@ -249,6 +257,16 @@ class Employees(models.Model):
     create_time = models.DateField('创建日期', auto_now_add=True)
     modify_time = models.DateField('最后修改日期', default=timezone.now)
 
+    @classmethod
+    def recent_add_employees(cls):
+        return cls.objects.filter(modify_time=cls.objects.latest().modify_time)
+
+    def __str__(self):
+        return self.name
+
     def __str__ (self):
         return self.name
 
+    class Meta:
+        ordering = ["-id"]
+        get_latest_by = "modify_time"
