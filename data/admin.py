@@ -43,7 +43,7 @@ class ProvinceResource(resources.ModelResource):
 
 @admin.register(Province)
 class ProvinceAdmin(ImportExportModelAdmin):
-    list_display = ('name', 'city_count', )
+    list_display = ('name', 'city_count', 'company_count' )
     resource_class = ProvinceResource
    
 ## City
@@ -54,7 +54,7 @@ class CityResource(resources.ModelResource):
 
 @admin.register(City)
 class CityAdmin(ImportExportModelAdmin):
-    list_display = ('name', 'province', 'zone_count', )
+    list_display = ('name', 'province', 'zone_count', 'company_count' )
     list_filter = ('province',) 
     resource_class = CityResource
    
@@ -72,6 +72,18 @@ class ZoneAdmin(ImportExportModelAdmin):
     search_fields = ('name',)
     resource_class = ZoneResource
    
+## Address
+class AddressResource(resources.ModelResource):
+   
+    class Meta:
+        model = Address
+
+@admin.register(Address)
+class AddressAdmin(ImportExportModelAdmin):
+    list_display = ('name', 'zone',  'company_count', )
+    list_filter = ('zone', ) 
+    search_fields = ('name',)
+    resource_class = AddressResource
 
 class EmployeesInline(admin.StackedInline):
     model = Employees 
@@ -85,10 +97,10 @@ class CompanyResource(resources.ModelResource):
 
 @admin.register(Company)
 class CompanyAdmin(ImportExportModelAdmin):
-    list_display = ('name', 'get_industry', 'is_success', 'property',  'zone', 'employees_count', 'modify_time', 'create_time')
+    list_display = ('name', 'get_industry', 'is_success', 'property', 'get_address', 'employees_count', 'modify_time' )
 
     date_hierarchy = 'create_time'
-    list_filter = ("property", "industry", 'is_success', 'zone')   
+    list_filter = ("property", "industry", 'is_success', )   
     actions = ["mark_success"]
     inlines = [
         EmployeesInline,

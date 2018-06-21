@@ -63,6 +63,10 @@ class Province(models.Model):
     def city_count(self):
         return self.city_set.count()
 
+    @property
+    def company_count(self):
+        return Company.objects.filter(address__zone__city__province=self).count() 
+
     def __str__(self):
         return self.name
 
@@ -83,6 +87,10 @@ class City(models.Model):
     def zone_count(self,):
         return self.zone_set.count()
 
+    @property
+    def company_count(self):
+        return Company.objects.filter(address__zone__city=self).count() 
+
     def __str__(self):
         return self.name
 
@@ -102,12 +110,33 @@ class Zone(models.Model):
 
 
     def company_count(self):
-        return self.company_set.count()
+        return Company.objects.filter(address__zone=self).count() 
 
 
     def __str__(self):
         return self.name
 
+
+class Address(models.Model):
+    name = models.CharField(
+            max_length=10,
+            unique=True,
+            help_text="区域",
+            )
+
+    zone = models.ForeignKey(
+            Zone, 
+            on_delete=models.CASCADE, 
+            help_text="区域"
+            )
+
+
+    def company_count(self):
+        return self.company_set.count()
+
+
+    def __str__(self):
+        return self.name
 
 
 class Company(models.Model):
@@ -129,17 +158,19 @@ class Company(models.Model):
     info = models.TextField(blank=True, null=True)
     create_time = models.DateField('创建日期', auto_now_add=True)
     modify_time = models.DateField('最后修改日期', default=timezone.now)
-    zone = models.ForeignKey(Zone, on_delete=models.CASCADE, blank=True, null=True)
-    address = models.CharField('地址', max_length=30)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE,blank=True, null=True)
 
 
     def get_city(self):
-        city = '{city}'.format(city=self.zone.city.city_name)
+        city = '{city}'.format(city=self.address.zone.city.name)
         return city 
         
+    def get_zone(self):
+        zone = '{zone}'.format(city=self.address.zone.name)
+        return zone 
 
     def get_address(self):
-        address = '{address} {zone}'.format(address=self.zone.zone_name,zone=self.address.address_name)
+        address = '{address} {zone}'.format(address=self.address.zone.name,zone=self.address.name)
         return address 
     
     def employees_count(self):
