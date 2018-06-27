@@ -80,7 +80,7 @@ class AddressResource(resources.ModelResource):
 
 @admin.register(Address)
 class AddressAdmin(ImportExportModelAdmin):
-    list_display = ('name', 'zone',  'company_count', )
+    list_display = ('id', 'name', 'zone',  'company_count', )
     list_filter = ('zone', ) 
     search_fields = ('name',)
     resource_class = AddressResource
