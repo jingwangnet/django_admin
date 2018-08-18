@@ -148,8 +148,9 @@ class EmployeesResource(resources.ModelResource):
 
 @admin.register(Employees)
 class EmployeesAdmin(ImportExportModelAdmin):
-    list_display = ('name', 'company',  'department',  'position', 'gender', 'phone', 'tel',  'modify_time', 'create_time')
-    list_filter = ('department', 'position' )
+    #list_display = ('name', 'company',  'department',  'position', 'gender', 'phone', 'tel',  'modify_time', 'create_time')
+    list_display = ('name', 'company',  'department',  'position', 'gender', 'phone' )
+    #list_filter = ('department', 'position' )
    
     
     search_fields = ('name',)
